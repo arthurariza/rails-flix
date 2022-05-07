@@ -2,7 +2,7 @@ class MoviesController < ApplicationController
   before_action :set_movie, only: %w[show edit update]
 
   def index
-    @movies = Movie.all
+    @movies = Movie.released
   end
 
   def new
