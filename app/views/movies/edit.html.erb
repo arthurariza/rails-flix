@@ -1,3 +1,5 @@
 <h1>Editing <%= @movie.title %></h1>
 
+<%= render 'shared/errors', object: @movie %>
+
 <%= render 'form', movie: @movie %>
