@@ -13,5 +13,9 @@
   <%= f.label :password_confirmation %>
   <%= f.password_field :password_confirmation %>
 
-  <%= f.submit data: { disable_with: false } %>
+  <% if user.new_record? %>
+    <%= f.submit "Create Account", data: { disable_with: false } %>
+  <% else %>
+    <%= f.submit "Update Account", data: { disable_with: false } %>
+  <% end %>
 <% end %>
