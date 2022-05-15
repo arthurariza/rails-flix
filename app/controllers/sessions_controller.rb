@@ -6,7 +6,8 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to root_path, notice: "Welcome back, #{user.name}"
+      redirect_to (session[:intended_url] || user), notice: "Welcome back, #{user.name}"
+      session[:intended_url] = nil
     else
       flash.now[:alert] = 'Wrong credentials'
       render :new

@@ -1,12 +1,14 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show edit update destroy]
   before_action :require_signin, except: %i[new create]
+  before_action :require_correct_user, only: %i[edit update destroy]
 
   def index
     @users = User.all
   end
 
-  def show; end
+  def show
+    @user = User.find(params[:id])
+  end
 
   def new
     @user = User.new
@@ -41,8 +43,9 @@ class UsersController < ApplicationController
 
   private
 
-  def set_user
+  def require_correct_user
     @user = User.find(params[:id])
+    redirect_to root_url unless current_user?(@user)
   end
 
   def user_params
