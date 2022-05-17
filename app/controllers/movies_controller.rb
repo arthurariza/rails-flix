@@ -1,5 +1,7 @@
 class MoviesController < ApplicationController
-  before_action :set_movie, only: %w[show edit update]
+  before_action :set_movie, only: %i[show edit update]
+  before_action :require_signin, except: %i[index show]
+  before_action :require_admin, except: %i[index show]
 
   def index
     @movies = Movie.released
