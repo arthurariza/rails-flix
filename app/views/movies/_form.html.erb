@@ -23,5 +23,9 @@
   <%= f.label :image_file_name %>
   <%= f.select :image_file_name, Movie::IMGS, prompt: 'Pick One' %>
 
+  <div class="checkboxes">
+    <%= f.collection_check_boxes(:genre_ids, Genre.order(:name), :id, :name) %>
+  </div>
+
   <%= f.submit data: { disable_with: false } %>
 <% end %>

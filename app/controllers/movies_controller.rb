@@ -23,6 +23,7 @@ class MoviesController < ApplicationController
 
   def show
     @fans = @movie.fans
+    @genres = @movie.genres.order(:name)
   end
 
   def edit; end
@@ -52,6 +53,6 @@ class MoviesController < ApplicationController
 
   def movie_params
     params.require(:movie).permit(:title, :description, :rating, :released_on, :total_gross, :director, :duration,
-                                  :image_file_name)
+                                  :image_file_name, genre_ids: [])
   end
 end
