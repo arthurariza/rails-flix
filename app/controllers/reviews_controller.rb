@@ -24,7 +24,7 @@ class ReviewsController < ApplicationController
   private
 
   def set_event
-    @movie = Movie.find_by_id(params[:movie_id])
+    @movie = Movie.find_by_slug(params[:movie_id])
   end
 
   def review_params

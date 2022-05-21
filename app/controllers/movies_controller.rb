@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-  before_action :set_movie, only: %i[show edit update]
+  before_action :set_movie, only: %i[show edit update destroy]
   before_action :require_signin, except: %i[index show]
   before_action :require_admin, except: %i[index show]
 
@@ -44,7 +44,6 @@ class MoviesController < ApplicationController
   end
 
   def destroy
-    @movie = Movie.find(params[:id])
     @movie.destroy
 
     redirect_to movies_url, alert: 'Movie successfully deleted!'
@@ -53,7 +52,7 @@ class MoviesController < ApplicationController
   private
 
   def set_movie
-    @movie = Movie.find(params[:id])
+    @movie = Movie.find_by_slug(params[:id])
 
     @favorite = current_user.favorites.find_by(movie_id: @movie.id) if current_user
   end
