@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Movie, type: :model do
   describe 'associations' do
     it { should have_many(:reviews).dependent(:destroy) }
@@ -31,5 +32,52 @@ RSpec.describe Movie, type: :model do
       should validate_length_of(:description)
         .is_at_least(25)
     }
+  end
+
+  describe 'scopes' do
+    before do
+      create(:movie, released_on: 1.year.ago)
+      create(:movie, released_on: 1.year.ago)
+      create(:movie, released_on: 1.year.ago)
+      create(:movie, released_on: 1.year.from_now)
+      create(:movie, released_on: 1.year.from_now)
+    end
+
+    it 'shows only released movies' do
+      expect(Movie.released.count).to eq 3
+    end
+    it 'shows only upcoming movies' do
+      expect(Movie.upcoming.count).to eq 2
+    end
+  end
+
+  describe 'Movie#flop?' do
+    it 'total gross less than 250mil is a flop' do
+      flopped_movie = create(:movie, total_gross: 249_999_999)
+
+      expect(flopped_movie.flop?).to be true
+    end
+
+    it 'total gross greater than 250mil is not a flop' do
+      movie = create(:movie, total_gross: 250_000_000)
+
+      expect(movie.flop?).to be false
+    end
+  end
+
+  describe 'Movie#average_stars' do
+    let!(:movie) { create(:movie) }
+    let!(:user) { create(:user) }
+
+    it 'defaults to 0.0 when no reviews' do
+      expect(movie.average_stars).to eq 0.0
+    end
+
+    it 'calculates the average stars for a movie' do
+      create(:review, movie_id: movie.id, user_id: user.id, stars: 5)
+      create(:review, movie_id: movie.id, user_id: user.id, stars: 2)
+
+      expect(movie.average_stars).to eq 0.35e1
+    end
   end
 end
