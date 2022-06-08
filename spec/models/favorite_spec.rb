@@ -9,7 +9,10 @@ RSpec.describe Favorite, type: :model do
   end
 
   describe 'validations' do
-    subject { Favorite.create(user_id: 1, movie_id: 1) }
+    let!(:movie) { create(:movie) }
+    let!(:user) { create(:user) }
+
+    subject { Favorite.create(user_id: user.id, movie_id: movie.id) }
     it { should validate_uniqueness_of(:movie_id).scoped_to(:user_id) }
   end
 end
