@@ -17,4 +17,15 @@ RSpec.describe Review, type: :model do
         .with_message(/must be between 1 and 5/)
     end
   end
+
+  describe 'Review#stars_as_percent' do
+    let!(:movie) { create(:movie) }
+    let!(:user) { create(:user) }
+
+    it 'result has one decimal case' do
+      review = create(:review, movie_id: movie.id, user_id: user.id, stars: 3)
+
+      expect(review.stars_as_percent).to eq 60.0
+    end
+  end
 end
